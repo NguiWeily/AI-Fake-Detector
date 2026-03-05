@@ -1,37 +1,64 @@
+# Fake Media Detector API
 
-from fastapi import FastAPI, UploadFile, File
-import shutil, os
+This project detects suspicious or fake **text, images, and videos** commonly shared on WhatsApp or Telegram.
 
-from detectors.text_detector import detect_fake_text
-from detectors.image_detector import detect_fake_image
-from detectors.video_detector import detect_fake_video
+## Features
 
-app = FastAPI()
+- AI misinformation detection
+- Image manipulation detection
+- OCR text extraction from images
+- Video frame analysis
+- REST API using FastAPI
 
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+## Installation
 
-@app.get("/")
-def root():
-    return {"message": "Fake Media Detector API running"}
+1. Install Python 3.10+
 
-@app.post("/detect-text")
-async def detect_text(text: str):
-    result = detect_fake_text(text)
-    return {"analysis": result}
+2. Install dependencies
 
-@app.post("/detect-image")
-async def detect_image(file: UploadFile = File(...)):
-    path = f"{UPLOAD_FOLDER}/{file.filename}"
-    with open(path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    result = detect_fake_image(path)
-    return {"analysis": result}
+pip install -r requirements.txt
 
-@app.post("/detect-video")
-async def detect_video(file: UploadFile = File(...)):
-    path = f"{UPLOAD_FOLDER}/{file.filename}"
-    with open(path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    result = detect_fake_video(path)
-    return {"analysis": result}
+3. Add your OpenAI API key in `config.py`
+
+OPENAI_API_KEY = "YOUR_API_KEY"
+
+4. Run the server
+
+uvicorn app:app --reload
+
+Server runs at:
+
+http://localhost:8000
+
+## API Endpoints
+
+### Detect Text
+
+POST /detect-text
+
+Example:
+
+{
+"text": "Forwarded many times: Government giving $5000 grant..."
+}
+
+### Detect Image
+
+POST /detect-image
+
+Upload image file.
+
+### Detect Video
+
+POST /detect-video
+
+Upload video file.
+
+## Integration
+
+You can connect this API with:
+
+- Telegram Bot
+- WhatsApp Business API
+- Mobile apps
+- Web dashboards

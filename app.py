@@ -1,11 +1,40 @@
+from fastapi import FastAPI, UploadFile, File
+import shutil, os
 
-import pytesseract
-import cv2
+from detectors.text_detector import detect_fake_text
+from detectors.image_detector import detect_fake_image
+from detectors.video_detector import detect_fake_video
 
-def extract_text_from_image(path):
-    try:
-        img = cv2.imread(path)
-        text = pytesseract.image_to_string(img)
-        return text.strip()
-    except:
-        return ""
+app = FastAPI()
+
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+@app.get("/")
+def root():
+    return {"message": "Fake Media Detector API running"}
+
+@app.post("/detect-text")
+async def detect_text(text: str):
+    result = detect_fake_text(text)
+    return {"analysis": result}
+
+@app.post("/detect-image")
+async def detect_image(file: UploadFile = File(...)):
+    path = f"{UPLOAD_FOLDER}/{file.filename}"
+
+    with open(path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    result = detect_fake_image(path)
+    return {"analysis": result}
+
+@app.post("/detect-video")
+async def detect_video(file: UploadFile = File(...)):
+    path = f"{UPLOAD_FOLDER}/{file.filename}"
+
+    with open(path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    result = detect_fake_video(path)
+    return {"analysis": result}
