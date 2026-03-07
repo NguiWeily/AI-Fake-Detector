@@ -62,3 +62,13 @@ You can connect this API with:
 - WhatsApp Business API
 - Mobile apps
 - Web dashboards
+
+## Telegram Bot
+Install dependencies:
+python -m pip install -r requirements.txt
+
+Set bot token in terminal:
+$env:TELEGRAM_TOKEN = "123:ABC-your-token-here"
+
+Run the bot:
+python telegram_bot.py
