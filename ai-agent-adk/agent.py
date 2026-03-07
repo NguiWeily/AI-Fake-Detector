@@ -1,10 +1,21 @@
 import os
 import sys
+import asyncio
 
 from dotenv import load_dotenv
 from google.adk.agents import Agent
-from google.adk.models.lite_llm import LiteLlm
+from google.adk.models.lite_llm import LiteLlm # For multi-model support
 from google.adk.tools.agent_tool import AgentTool
+from google.adk.sessions import InMemorySessionService
+from google.adk.runners import Runner
+from google.genai import types # For creating message Content/Parts
+
+import warnings
+# ignore all warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.basicConfig(level=logging.ERROR)
 
 # Import your custom tools from your tools.py script, or place in this script
 from .tools import searxng_search
