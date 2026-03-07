@@ -3,4 +3,4 @@ python-telegram-bot==22.6
 fastapi
 uvicorn
 Pillow
-google-generativeai>=0.5.0
+google-genai
