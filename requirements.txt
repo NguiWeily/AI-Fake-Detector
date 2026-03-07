@@ -2,7 +2,7 @@
 python-telegram-bot==22.6
 fastapi
 uvicorn
-openai
 Pillow
+google-genai
 google-adk
 python-dotenv
