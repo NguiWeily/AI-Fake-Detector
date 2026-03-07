@@ -71,4 +71,4 @@ Set bot token in terminal:
 $env:TELEGRAM_TOKEN = "123:ABC-your-token-here"
 
 Run the bot:
-python telegram_bot.py
+python telegram_bot.py --cli "TEXT_HERE"
