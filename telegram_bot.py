@@ -78,33 +78,47 @@ def get_token() -> str:
 
 
 def main_cli():
-    """Run the text detector from the command line."""
+    """Run the text detector from the command line in an interactive loop."""
     if detect_fake_text is None:
-        print("Text detector not available.")
+        print("Text detector is not available.", file=sys.stderr)
         sys.exit(1)
 
-    # Check if text is provided as command-line arguments, excluding the script name and '--cli'
+    # Check for non-interactive use first (text passed as arguments)
     args = [arg for arg in sys.argv[1:] if arg != '--cli']
     if args:
         text = " ".join(args).strip()
-    else:
-        try:
-            text = input("Enter text to analyze: ").strip()
-        except EOFError:
-            text = ""
-
-    if not text:
-        print("No text provided. Exiting.")
+        if text:
+            try:
+                result = detect_fake_text(text)
+                print("=== Analysis Result ===")
+                print(result)
+            except Exception as e:
+                print(f"Detection error: {e}", file=sys.stderr)
+        else:
+            print("No text provided.", file=sys.stderr)
         sys.exit(0)
 
-    try:
-        # The detector function might be synchronous
-        result = detect_fake_text(text)
-    except Exception as e:
-        result = f"Detection error: {e}"
+    # Interactive loop
+    print("Entering interactive mode. Type 'quit' or 'exit' to stop.")
+    while True:
+        try:
+            text = input("Enter text to analyze: ").strip()
+            if not text:
+                continue
+            if text.lower() in ('quit', 'exit'):
+                print("Exiting interactive mode.")
+                break
 
-    print("=== Analysis Result ===")
-    print(result)
+            try:
+                result = detect_fake_text(text)
+                print("=== Analysis Result ===")
+                print(result)
+            except Exception as e:
+                print(f"Detection error: {e}", file=sys.stderr)
+
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting interactive mode.")
+            break
 
 
 def start_bot():

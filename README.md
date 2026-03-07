@@ -18,9 +18,9 @@ This project detects suspicious or fake **text, images, and videos** commonly sh
 
 pip install -r requirements.txt
 
-3. Add your OpenAI API key in `config.py`
+3. Add your Gemini API key in `config.py` or environment
 
-OPENAI_API_KEY = "YOUR_API_KEY"
+GEMINI_API_KEY = "YOUR_GEMINI_KEY"
 
 4. Run the server
 
@@ -72,3 +72,15 @@ $env:TELEGRAM_TOKEN = "123:ABC-your-token-here"
 
 Run the bot:
 python telegram_bot.py --cli "TEXT_HERE"
+
+## AI Provider (Gemini)
+This project uses Google Gemini via the `google-generativeai` package.
+
+Set `GEMINI_API_KEY` in your environment (or in `config.py`) and run the CLI:
+
+```powershell
+set GEMINI_API_KEY=your_gemini_key_here
+python detect_cli.py "Some text to analyze"
+```
+
+If the `google-generativeai` package or `GEMINI_API_KEY` is missing, the CLI will print a clear error.
